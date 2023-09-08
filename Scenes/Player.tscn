@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://dr3vs5mf1iglf"]
+
+[ext_resource type="Texture2D" uid="uid://d0ipvaq7sr6a5" path="res://Ressources/SunnyLand/Sunny-land-assets-files/PNG/sprites/player/idle/player-idle-1.png" id="1_0u6r8"]
+[ext_resource type="Script" path="res://Scenes/Player.gd" id="1_tryf3"]
+[ext_resource type="Texture2D" uid="uid://84wljhbqna6y" path="res://Ressources/SunnyLand/Sunny-land-assets-files/PNG/sprites/player/idle/player-idle-2.png" id="2_5na62"]
+[ext_resource type="Texture2D" uid="uid://b4cvfi72ew4c1" path="res://Ressources/SunnyLand/Sunny-land-assets-files/PNG/sprites/player/idle/player-idle-3.png" id="3_x20kp"]
+[ext_resource type="Texture2D" uid="uid://cbn0cy5lrh53x" path="res://Ressources/SunnyLand/Sunny-land-assets-files/PNG/sprites/player/idle/player-idle-4.png" id="4_238pt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b430o"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5djgq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0u6r8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_5na62")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_x20kp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_238pt")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Player" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("1_tryf3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CapsuleShape2D_b430o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+sprite_frames = SubResource("SpriteFrames_5djgq")
+animation = &"Idle"

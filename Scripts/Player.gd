@@ -9,6 +9,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = get_node("AnimatedSprite2D")
 
 func _physics_process(delta):
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -19,11 +20,12 @@ func _physics_process(delta):
 		jump()
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction = Input.get_axis("Left", "Right")
+	
 	if direction:
 		velocity.x = direction * SPEED
-		setCharacterDirection(direction)
+		set_character_direction(direction)
+		
 		if velocity.y == 0:
 			run()
 	else:
@@ -48,9 +50,9 @@ func jump():
 
 func run():
 	anim.play("Run")
-	
+
 # to make the character move from left to right	
-func setCharacterDirection(direction):
+func set_character_direction(direction):
 	if direction == -1:
 		sprite.flip_h = true
 	else:

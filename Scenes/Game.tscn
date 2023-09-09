@@ -1,25 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmgbqpoinv2x"]
+[gd_scene load_steps=3 format=3 uid="uid://cmgbqpoinv2x"]
 
 [ext_resource type="PackedScene" uid="uid://dr3vs5mf1iglf" path="res://Scenes/Player.tscn" id="1_85436"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_efogi"]
-size = Vector2(333, 20)
-
-[sub_resource type="BoxMesh" id="BoxMesh_26bid"]
+[ext_resource type="PackedScene" uid="uid://didnl3m3vv8yr" path="res://Scenes/Line.tscn" id="2_3wuih"]
 
 [node name="Game" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_85436")]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(0, 57)
-shape = SubResource("RectangleShape2D_efogi")
-debug_color = Color(0, 0.6, 0.701961, 0.419608)
-
-[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D"]
-position = Vector2(1.25993, 58)
-rotation = -3.14159
-scale = Vector2(332.359, 19.8988)
-mesh = SubResource("BoxMesh_26bid")
+[node name="Line" parent="." instance=ExtResource("2_3wuih")]
+position = Vector2(1, 37)

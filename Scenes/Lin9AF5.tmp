@@ -6,14 +6,13 @@ script/source = "extends StaticBody2D
 var draw_timer
 var undraw_timer
 var is_drawing = false
+@onready var current_line_index = -1
 var lines = []
 var start_position
 var end_position
-const undraw_timing = 0.5
 
 func _ready():
-	start_draw_timer()
-	start_undraw_timer()
+	pass
 	
 func _process(delta):
 	if Input.is_action_just_pressed(\"Draw\"):
@@ -25,73 +24,40 @@ func _process(delta):
 func start_drawing():
 	is_drawing = true
 	add_draw_line()
-
+	lines[current_line_index].add_point(get_global_mouse_position())
+	
 func end_drawing():
 	is_drawing = false	
 
 func start_undraw_timer():
-	print(\"Starting undraw timer\")
 	undraw_timer = Timer.new()
 	add_child(undraw_timer)
-	undraw_timer.set_wait_time(undraw_timing)
+	undraw_timer.set_wait_time(0.3)
 	undraw_timer.set_one_shot(false)
-	undraw_timer.connect(\"timeout\", undraw)
+	undraw_timer.connect(\"timeout\", remove_point_to_lines.bind(lines[current_line_index]))
 	undraw_timer.start()
 
-func draw():
-	var line 
-	var children = get_children()
-	children.reverse()
-	for node in children:
-		if node.is_class(\"Line2D\"):
-			line = node
-			break
-	
-	if line == null:
-		return
-	
-	add_point_to_line(line)
-		
-	if line.get_point_count() > 1:
-		var collisions = get_collisions(line)
-		for c in collisions:
-			add_child(c)
-	
-func undraw():
-	var line 
-	for node in get_children():
-		if node.is_class(\"Line2D\"):
-			line = node
-			break
-			
-	if line == null:
-		return
-		
-	remove_first_point(line)
-	
-	if line.get_point_count() == 0:	
-		remove_child(line)
-		
-	# HERE FIND A WAY TO REMOVE COLISIONS
-
-func remove_first_point(line):
+func remove_point_to_lines(line):
 	if line.get_point_count() > 0:
 		line.remove_point(0)
 
-func start_draw_timer():
-	print(\"Starting draw timer\")
+func start_line_draw_timer():
 	draw_timer = Timer.new()
 	add_child(draw_timer)
 	draw_timer.set_wait_time(0.1)
 	draw_timer.set_one_shot(false)
-	draw_timer.connect(\"timeout\", draw)
+	draw_timer.connect(\"timeout\", add_point_to_lines.bind(lines[current_line_index]))
 	draw_timer.start()
 
-func add_point_to_line(line):
+func end_line_draw_timer():
+	draw_timer.stop()
+	remove_child(draw_timer)
+
+func add_point_to_lines(line):
 	if not is_drawing:
 		return
-	
-	line.add_point(get_global_mouse_position())
+		
+	lines[current_line_index].add_point(get_global_mouse_position())
 
 func get_new_line():
 	var line = Line2D.new()
@@ -101,19 +67,20 @@ func get_new_line():
 
 func add_draw_line():
 	var line = get_new_line()
-	add_child(line)
+	current_line_index+=1
+	lines.append(lines[current_line_index])
+	add_child(lines[current_line_index])
+	start_line_draw_timer()
+	start_undraw_timer()
 
-func get_collisions(line):
-	var collisions = []
+func get_collision(line):
 	for i in line.points.size() - 1:
 		var collision_shape = CollisionShape2D.new()
 		var segment = SegmentShape2D.new()
 		segment.a = line.points[i]
 		segment.b = line.points[i + 1]
 		collision_shape.shape = segment
-		collisions.append(collision_shape)
-		
-	return collisions
+		return collision_shape
 "
 
 [node name="LineDrawer" type="StaticBody2D"]

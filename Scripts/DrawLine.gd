@@ -1,56 +1,70 @@
 extends StaticBody2D
 
+const util = preload("res://Scripts/Util.gd")
 var is_drawing = false
-var start_position
-var end_position
+var current_point_index = -1
 
-# Called when the node enters the scene tree for the first time.
+@onready var line : Line2D = get_node("Line2D")
+@onready var undraw_timer : Timer = get_node("UndrawTimer")
+
 func _ready():
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	pass 
+	
 func _process(delta):
 	if Input.is_action_just_pressed("Draw"):
-		is_drawing = true
-		start_position = get_mouse_position()
-	
+		start_drawing()
+		
 	if Input.is_action_just_released("Draw"):
-		end_position = get_mouse_position()
-		draw_line_with_collision(start_position, end_position)
-		is_drawing = false
+		is_drawing = false	
+	
+	if is_drawing:
+		draw()
 
-func draw_line_with_collision(start, end):
-	var line = Line2D.new()
-	line.texture = load("res://Ressources/SunnyLand/sunny-land/assets/environment/collision.png")
-	line.width = 5
-	line.add_point(start)
-	line.add_point(end)
-	var collision = get_collision(line)
+func start_drawing():
+	_undraw()
+	undraw_timer.start()
+	add_point_and_collision()
+	is_drawing = true
+
+func draw():
+	var length = get_line_length()
+	if (length < 100):
+		add_point_and_collision()
+	
+func _undraw():
+	current_point_index = -1
+	line.clear_points()
+	remove_collisions()
+	undraw_timer.stop()
+	
+func get_line_length():
+	var total_distance = 0
+	
+	if line.get_point_count() < 2:
+		return total_distance
+	
+	for index in line.get_point_count() - 1:
+		var point1 = line.get_point_position(index)
+		var point2 = line.get_point_position(index + 1)
+		total_distance += point1.distance_to(point2) 
+
+	return total_distance
+
+func add_point_and_collision():
+	line.add_point(get_global_mouse_position())
+	current_point_index += 1
+	
+	if (current_point_index < 1):
+		return
+	
+	var collision = CollisionShape2D.new()
+	var segment = SegmentShape2D.new()
+	segment.a = line.get_point_position(current_point_index -1)
+	segment.b = line.get_point_position(current_point_index)
+	collision.shape = segment
 	add_child(collision)
-	add_child(line)
-	add_timer_to_destroy([line, collision])
 
-func add_timer_to_destroy(arr):
-	var timer = Timer.new()
-	arr.append(timer)
-	timer.set_wait_time(1)
-	timer.connect("timeout", remove_children.bind(arr))
-	
-	add_child(timer)
-	timer.start()
-	
-func remove_children(children):
-	for child in children:
-		remove_child(child)
-	
-func get_collision(line):
-	for i in line.points.size() - 1:
-		var collision_shape = CollisionShape2D.new()
-		var segment = SegmentShape2D.new()
-		segment.a = line.points[i]
-		segment.b = line.points[i + 1]
-		collision_shape.shape = segment
-		return collision_shape
-
-func get_mouse_position():
-	return get_global_mouse_position()
+func remove_collisions():
+	for child in get_children():
+		if child is CollisionShape2D:
+			remove_child(child)

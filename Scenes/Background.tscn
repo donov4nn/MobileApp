@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cb8rmt1r8le5u"]
+
+[ext_resource type="Script" path="res://Scripts/Background.gd" id="1_1c7n7"]
+[ext_resource type="Texture2D" uid="uid://dqcm0e6jgh25r" path="res://Ressources/SunnyLand/Sunny-land-assets-files/code/sunny-land/assets/environment/back.png" id="2_knb7w"]
+
+[node name="Background" type="ParallaxBackground"]
+script = ExtResource("1_1c7n7")
+
+[node name="Back" type="Sprite2D" parent="."]
+position = Vector2(240, 424)
+scale = Vector2(3.56667, 3.56667)
+texture = ExtResource("2_knb7w")
+region_enabled = true
+region_rect = Rect2(3, 1, 138, 242)

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cmgbqpoinv2x"]
+[gd_scene load_steps=8 format=3 uid="uid://cmgbqpoinv2x"]
 
 [ext_resource type="PackedScene" uid="uid://dr3vs5mf1iglf" path="res://Scenes/Player.tscn" id="1_85436"]
 [ext_resource type="PackedScene" uid="uid://didnl3m3vv8yr" path="res://Scenes/Line.tscn" id="2_3wuih"]
 [ext_resource type="Texture2D" uid="uid://clvtw5wdwn7br" path="res://Ressources/SunnyLand/sunny-land/assets/environment/tileset.png" id="3_35xfb"]
 [ext_resource type="AudioStream" uid="uid://dmlkkl3yrcq8g" path="res://Ressources/SunnyLand/sunny-land/assets/sound/platformer_level03_loop.ogg" id="4_oapgf"]
+[ext_resource type="PackedScene" uid="uid://cb8rmt1r8le5u" path="res://Scenes/Background.tscn" id="5_a6jrq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_22ppg"]
 texture = ExtResource("3_35xfb")
@@ -402,15 +403,18 @@ sources/0 = SubResource("TileSetAtlasSource_22ppg")
 [node name="Game" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_85436")]
-position = Vector2(1, -18)
+position = Vector2(184, 176)
 
 [node name="LineDrawer" parent="." instance=ExtResource("2_3wuih")]
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2(184, 192)
 tile_set = SubResource("TileSet_tnxk4")
 format = 2
 layer_0/name = "Ground"
 layer_0/tile_data = PackedInt32Array(65536, 1114112, 14, 131071, 1114112, 14, 131070, 1114112, 14, 131069, 983040, 14, 65537, 1114112, 14, 65538, 1245184, 14)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_oapgf")
+
+[node name="Background" parent="." instance=ExtResource("5_a6jrq")]

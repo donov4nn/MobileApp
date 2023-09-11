@@ -1,14 +1,25 @@
 [gd_scene load_steps=3 format=3 uid="uid://cb8rmt1r8le5u"]
 
-[ext_resource type="Script" path="res://Scripts/Background.gd" id="1_1c7n7"]
 [ext_resource type="Texture2D" uid="uid://dqcm0e6jgh25r" path="res://Ressources/SunnyLand/Sunny-land-assets-files/code/sunny-land/assets/environment/back.png" id="2_knb7w"]
+[ext_resource type="Texture2D" uid="uid://3i8jxqagqk0f" path="res://Ressources/SunnyLand/sunny-land/assets/environment/cloud.png" id="3_m8q7b"]
 
 [node name="Background" type="ParallaxBackground"]
-script = ExtResource("1_1c7n7")
 
-[node name="Back" type="Sprite2D" parent="."]
-position = Vector2(240, 424)
-scale = Vector2(3.56667, 3.56667)
+[node name="Sky" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+
+[node name="Back" type="Sprite2D" parent="Sky"]
+position = Vector2(240, 428)
+scale = Vector2(3.47826, 3.53719)
 texture = ExtResource("2_knb7w")
 region_enabled = true
 region_rect = Rect2(3, 1, 138, 242)
+
+[node name="Clouds" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(480, 0)
+
+[node name="Cloud" type="Sprite2D" parent="Clouds"]
+position = Vector2(272, 64)
+scale = Vector2(0.784867, 0.784866)
+texture = ExtResource("3_m8q7b")
